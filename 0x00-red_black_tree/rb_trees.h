@@ -33,5 +33,11 @@ typedef struct rb_tree_s
 
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
 
+/*  */
 int rb_tree_is_valid(const rb_tree_t *tree);
+/*  */
 int find_red_nodes(const rb_tree_t *tree);
+/*  */
+int am_i_a_leaf(const rb_tree_t *node);
+/*  */
+int check_valid_node(const rb_tree_t *node);

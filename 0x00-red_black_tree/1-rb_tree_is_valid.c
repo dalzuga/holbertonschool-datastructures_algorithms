@@ -9,81 +9,75 @@
  */
 int rb_tree_is_valid(const rb_tree_t *tree)
 {
-  rb_tree_t const *node;
-
   if (tree == NULL)
-    return (0);
-
-  if (find_red_nodes(tree) == 1) /* if tree is not valid */
-    return (1);
-
-  if ((tree->color != BLACK) && (tree->color != RED))
-    return (0);			/* root must be one or the other */
-
-  node = tree;
-
-  if ((node->left == NULL) || (node->right == NULL))
-    return (0);			/* there must an address */
-
-  if (am_i_a_leaf(node) == 0)
     {
-      if (leaf_is_black(node) == 0)
+      return (2); 		/* undefined */
     }
 
-  return (1);			/* it's a valid rb_tree */
+  if (bst_tree_is_valid(tree) == 0)
+    return (0);
+
+  if (check_red_nodes(tree) == 0)
+    return (0);
+
+  return ();
 }
 
 /**
- * find_red_nodes - checks red nodes in the tree
+ * bst_tree_is_valid - checks bst tree property
  *
  * @tree: root node pointer
  *
- * Return: 0 if a red node without two black children is found, 1 otherwise.
+ * Return: 1 if valid bst tree, 0 if not.
  */
-int find_red_nodes(const rb_tree_t *tree)
+int bst_tree_is_valid(const rb_tree_t *tree)
 {
-  if (tree == NULL)
-    return (0);
+  /* 'strictly less' means '<' */
+  /* the opposite of '<' is '>=' */
 
-  if (tree->color == RED)
+  int aux = 0;
+
+  /* the node holds a number */
+  if ((tree->left == NULL) && (tree->right == NULL))
     {
-      if (tree->left != NULL && tree->left->color == RED)
-	return (1);
-      if (tree->right != NULL && tree->right->color == RED)
-	return (1);
+      /* the node is by itself */
+      return (1);
     }
 
   if (tree->left != NULL)
-    return (find_red_nodes(tree->left));
+    {
+      if (!(tree->left->n < tree->n))
+	{
+	  return (0);		/* node on the left is bigger */
+	}
+      else
+	{
+	  aux = bst_tree_valid(tree->left);
+	}
+    }
+
+  if (aux == 0)
+    return (0);
+
   if (tree->right != NULL)
-    return (find_red_nodes(tree->right));
+    {
+      if (tree->right->n >= tree->n)
+	{
+	  return (1);		/* node on the right is bigger */
+	}
+      else
+	{
+	  aux = bst_tree_valid(tree->right);
+	}
+    }
 
-  return (0);
-}
-
-/**
- * am_i_a_leaf - checks if we're a NULL node.
- *
- * Return: 1 if yes, 0 if no.
- */
-int am_i_a_leaf(const rb_tree_t *node)
-{
-  if (node->value == NULL)
+  if (aux == 0)
+    return (0);
+  else
     return (1);
-  return (0);
 }
 
-/**
- * check_valid_node - checks if we're a valid node.
- *
- * Return: 0 if no, 1 if yes.
- */
-int check_valid_node(const rb_tree_t *node)
+int check_red_nodes()
 {
-  if ((node->left != NULL) && (node->right == NULL))
-    return (0);
-  if ((node->left == NULL) && (node->right != NULL))
-    return (0);
 
-  return (1);
 }
